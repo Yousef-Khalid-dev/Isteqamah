@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استقامة | موقع اذكار</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c786c;
+            --primary-dark: #004445;
+            --primary-light: #60c1b6;
+            --secondary: #f8b500;
+            --accent: #ff6b6b;
+            --light: #faf5e4;
+            --dark: #2d4059;
+            --text: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.7;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1542382257-80dedb725088?ixlib=rb-4.0.3') center/cover;
+            padding: 5rem 0;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #e6a700;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* Azkar Styles */
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .zekr-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-right: 5px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .zekr-card:hover {
+            transform: translateX(-5px);
+        }
+
+        .zekr-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .zekr-reference {
+            font-style: italic;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .count-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .count-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .count-display {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+        }
+
+        /* Prayer Times */
+        .prayer-times {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 2rem 0;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .prayer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .prayer-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .prayer-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .prayer-item.active {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        .prayer-name {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .prayer-time {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: var(--primary-dark);
+                width: 100%;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow);
+            }
+
+            .nav.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // بيانات الأذكار
+        const azkarData = {
+            morning: [
+                {
+                    id: 1,
+                    text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+                    reference: "سورة البقرة: 255",
+                    count: 1
+                },
+                {
+                    id: 2,
+                    text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+                    reference: "سورة الإخلاص",
+                    count: 3
+                },
+                {
+                    id: 3,
+                    text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+                    reference: "سورة الفلق",
+                    count: 3
+                },
+                {
+                    id: 4,
+                    text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ: قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَٰهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَالنَّاسِ",
+                    reference: "سورة الناس",
+                    count: 3
+                },
+                {
+                    id: 5,
+                    text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+                    reference: "رواه مسلم",
+                    count: 1
+                },
+                {
+                    id: 6,
+                    text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ",
+                    reference: "رواه الترمذي",
+                    count: 1
+                },
+                {
+                    id: 7,
+                    text: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+                    reference: "رواه البخاري",
+                    count: 1
+                },
+                {
+                    id: 8,
+                    text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي",
+                    reference: "رواه أبو داود",
+                    count: 1
+                },
+                {
+                    id: 9,
+                    text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+                    reference: "سورة التوبة: 129",
+                    count: 7
+                },
+                {
+                    id: 10,
+                    text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+                    reference: "رواه البخاري ومسلم",
+                    count: 100
+                }
+            ],
+            evening: [
+                {
+                    id: 1,
+                    text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+                    reference: "رواه مسلم",
+                    count: 1
+                },
+                {
+                    id: 2,
+                    text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ",
+                    reference: "رواه الترمذي",
+                    count: 1
+                }
+            ],
+            sleep: [
+                {
+                    id: 1,
+                    text: "اللَّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا",
+                    reference: "رواه البخاري",
+                    count: 1
+                },
+                {
+                    id: 2,
+                    text: "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ",
+                    reference: "رواه البخاري",
+                    count: 1
+                }
+            ],
+            prayer: [
+                {
+                    id: 1,
+                    text: "سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ",
+                    reference: "متفق عليه",
+                    count: 33
+                }
+            ]
+        };
+
+        // بيانات الأحاديث
+        const hadithData = [
+            {
+                id: 1,
+                text: "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى",
+                reference: "رواه البخاري ومسلم",
+                category: "نية"
+            },
+            {
+                id: 2,
+                text: "من حسن إسلام المرء تركه ما لا يعنيه",
+                reference: "رواه الترمذي",
+                category: "أخلاق"
+            },
+            {
+                id: 3,
+                text: "لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه",
+                reference: "رواه البخاري ومسلم",
+                category: "أخلاق"
+            },
+            {
+                id: 4,
+                text: "الكلمة الطيبة صدقة",
+                reference: "رواه البخاري ومسلم",
+                category: "أخلاق"
+            },
+            {
+                id: 5,
+                text: "اتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن",
+                reference: "رواه الترمذي",
+                category: "أخلاق"
+            }
+        ];
+
+        // بيانات أركان الإسلام
+        const arkanData = [
+            {
+                id: 1,
+                title: "الشهادتان",
+                description: "شهادة أن لا إله إلا الله وأن محمداً رسول الله",
+                details: "هي المفتاح لدخول الإسلام، وتعتبر الركن الأساسي الذي يقوم عليه الدين"
+            },
+            {
+                id: 2,
+                title: "إقامة الصلاة",
+                description: "الصلوات الخمس المفروضة في اليوم والليلة",
+                details: "هي عماد الدين، وهي الصلة بين العبد وربه، تؤدى في أوقات محددة"
+            },
+            {
+                id: 3,
+                title: "إيتاء الزكاة",
+                description: "إخراج جزء من المال للفقراء والمساكين",
+                details: "تطهير للمال ونمو له، وتزكية للنفس، وإغناء للفقراء"
+            },
+            {
+                id: 4,
+                title: "صوم رمضان",
+                description: "الصوم من طلوع الفجر إلى غروب الشمس طوال شهر رمضان",
+                details: "يُعرِّف الصائم بالجوع والعطش ليتذكر نعمة الله ويشعر بمعاناة الفقراء"
+            },
+            {
+                id: 5,
+                title: "حج البيت",
+                description: "الحج إلى مكة المكرمة مرة في العمر لمن استطاع إليه سبيلا",
+                details: "تجسيد للوحدة الإسلامية ورمز للمساواة بين الناس"
+            }
+        ];
+
+        // بيانات الأحكام
+        const ahkamData = [
+            {
+                id: 1,
+                title: "طهارة الماء",
+                description: "الأحكام المتعلقة بطهارة الماء واستخدامه للوضوء والغسل",
+                category: "الطهارة"
+            },
+            {
+                id: 2,
+                title: "شروط الصلاة",
+                description: "الشروط الواجب توافرها لصحة الصلاة",
+                category: "الصلاة"
+            },
+            {
+                id: 3,
+                title: "أركان الصلاة",
+                description: "الأركان الأساسية التي لا تصح الصلاة بدونها",
+                category: "الصلاة"
+            },
+            {
+                id: 4,
+                title: "مبطلات الصيام",
+                description: "الأمور التي تفطر الصائم وتفسد صومه",
+                category: "الصيام"
+            },
+            {
+                id: 5,
+                title: "شروط الزكاة",
+                description: "الشروط الواجب توافرها لوجوب الزكاة",
+                category: "الزكاة"
+            }
+        ];
+
+        // مكون الهيدر
+        const Header = ({ currentPage, setCurrentPage }) => {
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+            const navItems = [
+                { id: 'home', label: 'الرئيسية', icon: 'fas fa-home' },
+                { id: 'azkar', label: 'الأذكار', icon: 'fas fa-pray' },
+                { id: 'hadith', label: 'الأحاديث', icon: 'fas fa-book' },
+                { id: 'arkan', label: 'أركان الإسلام', icon: 'fas fa-mosque' },
+                { id: 'ahkam', label: 'الأحكام', icon: 'fas fa-scale-balanced' },
+                { id: 'quran', label: 'القرآن', icon: 'fas fa-quran' },
+                { id: 'prayer', label: 'أوقات الصلاة', icon: 'fas fa-clock' }
+            ];
+
+            return (
+                <header className="header">
+                    <div className="container">
+                        <div className="header-content">
+                            <div className="logo">
+                                <i className="fas fa-mosque"></i>
+                                <h1>استقامة</h1>
+                            </div>
+                            
+                            <button 
+                                className="mobile-menu-btn"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                <i className="fas fa-bars"></i>
+                            </button>
+                            
+                            <nav className={`nav ${mobileMenuOpen ? 'active' : ''}`}>
+                                {navItems.map(item => (
+                                    <a
+                                        key={item.id}
+                                        href="#"
+                                        className={currentPage === item.id ? 'active' : ''}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setCurrentPage(item.id);
+                                            setMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <i className={item.icon}></i> {item.label}
+                                    </a>
+                                ))}
+                            </nav>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        // مكون البطاقة
+        const ZekrCard = ({ zekr, onCountChange }) => {
+            const [count, setCount] = useState(0);
+
+            const handleIncrement = () => {
+                const newCount = count + 1;
+                setCount(newCount);
+                onCountChange(zekr.id, newCount);
+            };
+
+            const handleDecrement = () => {
+                if (count > 0) {
+                    const newCount = count - 1;
+                    setCount(newCount);
+                    onCountChange(zekr.id, newCount);
+                }
+            };
+
+            return (
+                <div className="zekr-card fade-in">
+                    <div className="zekr-text">{zekr.text}</div>
+                    <div className="zekr-reference">{zekr.reference}</div>
+                    <div className="counter">
+                        <button className="count-btn" onClick={handleDecrement}>-</button>
+                        <span className="count-display">{count}</span>
+                        <button className="count-btn" onClick={handleIncrement}>+</button>
+                    </div>
+                </div>
+            );
+        };
+
+        // مكون أوقات الصلاة
+        const PrayerTimes = () => {
+            const [currentTime, setCurrentTime] = useState(moment());
+            const [prayerTimes, setPrayerTimes] = useState({
+                fajr: '04:30',
+                sunrise: '06:00',
+                dhuhr: '12:15',
+                asr: '15:45',
+                maghrib: '18:30',
+                isha: '20:00'
+            });
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrentTime(moment());
+                }, 1000);
+
+                return () => clearInterval(timer);
+            }, []);
+
+            const getNextPrayer = () => {
+                const now = currentTime.format('HH:mm');
+                const prayers = Object.entries(prayerTimes);
+                
+                for (let [prayer, time] of prayers) {
+                    if (time > now) {
+                        return { prayer, time };
+                    }
+                }
+                
+                return { prayer: 'fajr', time: prayerTimes.fajr };
+            };
+
+            const nextPrayer = getNextPrayer();
+
+            return (
+                <div className="prayer-times">
+                    <div className="container">
+                        <h3 className="section-title" style={{color: 'white'}}>أوقات الصلاة</h3>
+                        <div className="prayer-container">
+                            {Object.entries(prayerTimes).map(([prayer, time]) => (
+                                <div 
+                                    key={prayer} 
+                                    className={`prayer-item ${nextPrayer.prayer === prayer ? 'active' : ''}`}
+                                >
+                                    <div className="prayer-name">
+                                        {prayer === 'fajr' && 'الفجر'}
+                                        {prayer === 'sunrise' && 'الشروق'}
+                                        {prayer === 'dhuhr' && 'الظهر'}
+                                        {prayer === 'asr' && 'العصر'}
+                                        {prayer === 'maghrib' && 'المغرب'}
+                                        {prayer === 'isha' && 'العشاء'}
+                                    </div>
+                                    <div className="prayer-time">{time}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{textAlign: 'center', marginTop: '20px', color: 'var(--secondary)'}}>
+                            <i className="fas fa-clock"></i> التوقيت الحالي: {currentTime.format('HH:mm:ss')}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // الصفحة الرئيسية
+        const HomePage = ({ setCurrentPage }) => {
+            const features = [
+                {
+                    icon: 'fas fa-pray',
+                    title: 'الأذكار اليومية',
+                    description: 'أذكار الصباح والمساء وأذكار النوم وأذكار الصلاة',
+                    link: 'azkar'
+                },
+                {
+                    icon: 'fas fa-book',
+                    title: 'الأحاديث النبوية',
+                    description: 'مجموعة مختارة من الأحاديث الصحيحة',
+                    link: 'hadith'
+                },
+                {
+                    icon: 'fas fa-mosque',
+                    title: 'أركان الإسلام',
+                    description: 'تعرف على أركان الإسلام الخمسة بالتفصيل',
+                    link: 'arkan'
+                },
+                {
+                    icon: 'fas fa-scale-balanced',
+                    title: 'الأحكام الفقهية',
+                    description: 'أهم الأحكام الفقهية في العبادات والمعاملات',
+                    link: 'ahkam'
+                },
+                {
+                    icon: 'fas fa-quran',
+                    title: 'القرآن الكريم',
+                    description: 'تلاوات وتسجيلات للقرآن الكريم',
+                    link: 'quran'
+                },
+                {
+                    icon: 'fas fa-clock',
+                    title: 'أوقات الصلاة',
+                    description: 'مواقيت الصلاة حسب توقيت مدينتك',
+                    link: 'prayer'
+                }
+            ];
+
+            return (
+                <div>
+                    <section className="hero">
+                        <div className="container">
+                            <div className="hero-content">
+                                <h2>مرحباً بكم في استقامة</h2>
+                                <p>موقع متكامل للأذكار اليومية، الأحاديث النبوية، أركان الإسلام، وأحكام الفقه. اجعل ذكر الله جزءاً من يومك مع استقامة.</p>
+                                <button 
+                                    className="btn"
+                                    onClick={() => setCurrentPage('azkar')}
+                                >
+                                    ابدأ بالأذكار
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <PrayerTimes />
+
+                    <section className="section">
+                        <div className="container">
+                            <h2 className="section-title">خدمات الموقع</h2>
+                            <div className="cards-grid">
+                                {features.map((feature, index) => (
+                                    <div key={index} className="card fade-in">
+                                        <div className="card-icon">
+                                            <i className={feature.icon}></i>
+                                        </div>
+                                        <h3>{feature.title}</h3>
+                                        <p>{feature.description}</p>
+                                        <button 
+                                            className="btn btn-outline"
+                                            onClick={() => setCurrentPage(feature.link)}
+                                        >
+                                            ابدأ الآن
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        };
+
+        // صفحة الأذكار
+        const AzkarPage = () => {
+            const [activeCategory, setActiveCategory] = useState('morning');
+            const [counts, setCounts] = useState({});
+
+            const handleCountChange = (zekrId, count) => {
+                setCounts(prev => ({
+                    ...prev,
+                    [zekrId]: count
+                }));
+            };
+
+            const categories = [
+                { id: 'morning', label: 'أذكار الصباح', icon: 'fas fa-sun' },
+                { id: 'evening', label: 'أذكار المساء', icon: 'fas fa-moon' },
+                { id: 'sleep', label: 'أذكار النوم', icon: 'fas fa-bed' },
+                { id: 'prayer', label: 'أذكار الصلاة', icon: 'fas fa-pray' }
+            ];
+
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">الأذكار اليومية</h2>
+                        
+                        <div className="categories">
+                            {categories.map(category => (
+                                <button
+                                    key={category.id}
+                                    className={`category-btn ${activeCategory === category.id ? 'active' : ''}`}
+                                    onClick={() => setActiveCategory(category.id)}
+                                >
+                                    <i className={category.icon}></i> {category.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div>
+                            {azkarData[activeCategory]?.map(zekr => (
+                                <ZekrCard
+                                    key={zekr.id}
+                                    zekr={zekr}
+                                    onCountChange={handleCountChange}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // صفحة الأحاديث
+        const HadithPage = () => {
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">الأحاديث النبوية</h2>
+                        <div className="cards-grid">
+                            {hadithData.map(hadith => (
+                                <div key={hadith.id} className="card fade-in">
+                                    <div className="card-icon">
+                                        <i className="fas fa-quote-right"></i>
+                                    </div>
+                                    <p className="zekr-text">{hadith.text}</p>
+                                    <div className="zekr-reference">{hadith.reference}</div>
+                                    <div style={{marginTop: '15px', padding: '8px 15px', background: '#f8f9fa', borderRadius: '8px', display: 'inline-block'}}>
+                                        {hadith.category}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // صفحة أركان الإسلام
+        const ArkanPage = () => {
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">أركان الإسلام</h2>
+                        <div className="cards-grid">
+                            {arkanData.map(arkan => (
+                                <div key={arkan.id} className="card fade-in">
+                                    <div className="card-icon">
+                                        <i className="fas fa-star"></i>
+                                    </div>
+                                    <h3>{arkan.title}</h3>
+                                    <p style={{fontWeight: 'bold', color: 'var(--primary)'}}>{arkan.description}</p>
+                                    <p>{arkan.details}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // صفحة الأحكام
+        const AhkamPage = () => {
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">الأحكام الفقهية</h2>
+                        <div className="cards-grid">
+                            {ahkamData.map(ahkam => (
+                                <div key={ahkam.id} className="card fade-in">
+                                    <div className="card-icon">
+                                        <i className="fas fa-scale-balanced"></i>
+                                    </div>
+                                    <h3>{ahkam.title}</h3>
+                                    <p>{ahkam.description}</p>
+                                    <div style={{marginTop: '15px', padding: '8px 15px', background: 'var(--primary-light)', color: 'white', borderRadius: '8px', display: 'inline-block'}}>
+                                        {ahkam.category}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // صفحة القرآن
+        const QuranPage = () => {
+            const surahs = [
+                { name: 'الفاتحة', verses: 7 },
+                { name: 'البقرة', verses: 286 },
+                { name: 'آل عمران', verses: 200 },
+                { name: 'النساء', verses: 176 },
+                { name: 'المائدة', verses: 120 }
+            ];
+
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">القرآن الكريم</h2>
+                        <div className="cards-grid">
+                            {surahs.map((surah, index) => (
+                                <div key={index} className="card fade-in">
+                                    <div className="card-icon">
+                                        <i className="fas fa-quran"></i>
+                                    </div>
+                                    <h3>سورة {surah.name}</h3>
+                                    <p>عدد الآيات: {surah.verses}</p>
+                                    <button className="btn btn-outline" style={{marginTop: '15px'}}>
+                                        <i className="fas fa-play"></i> استمع الآن
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // صفحة أوقات الصلاة
+        const PrayerPage = () => {
+            return (
+                <div className="section">
+                    <div className="container">
+                        <h2 className="section-title">أوقات الصلاة</h2>
+                        <PrayerTimes />
+                        <div className="card" style={{textAlign: 'center', marginTop: '2rem'}}>
+                            <h3>إعدادات الموقع</h3>
+                            <p>يمكنك ضبط الموقع حسب مدينتك للحصول على أوقات الصلاة الدقيقة[ملحوظه:سيتم اضافة هذه الميزة قريب ان شاءاللهالله في الباك اند]</p>
+                            <button className="btn" style={{marginTop: '15px'}}>
+                                <i className="fas fa-cog"></i> ضبط الإعدادات
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // الفوتر
+        const Footer = () => {
+            return (
+                <footer className="footer">
+                    <div className="container">
+                        <div className="footer-content">
+                            <div className="footer-column">
+                                <h3>عن استقامة</h3>
+                                <p>موقع استقامة هو منصة إسلامية شاملة تهدف إلى مساعدة المسلمين على الالتزام بذكر الله وتعلم أمور دينهم بشكل صحيح وسهل.</p>
+                            </div>
+                            
+                            <div className="footer-column">
+                                <h3>روابط سريعة</h3>
+                                <ul>
+                                    <li><a href="#"><i className="fas fa-home"></i> الرئيسية</a></li>
+                                    <li><a href="#"><i className="fas fa-pray"></i> الأذكار</a></li>
+                                    <li><a href="#"><i className="fas fa-book"></i> الأحاديث</a></li>
+                                    <li><a href="#"><i className="fas fa-mosque"></i> أركان الإسلام</a></li>
+                                    <li><a href="#"><i className="fas fa-scale-balanced"></i> الأحكام</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div className="footer-column">
+                                <h3>اتصل بنا</h3>
+                                <ul>
+                                    <li><i className="fas fa-phone"></i> +201007166173</li>
+                                    <li><i className="fas fa-envelope"></i> [هضيف جيميل قريب]</li>
+                                    <li><i className="fas fa-location-dot"></i> مصر</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div className="copyright">
+                            <p>حقوق الطبع والنشر محفوظة لدى [يوسف خالد | 𝑨𝒊𝒛𝒆𝒏 𝒌𝒊𝒏𝒈 𝒐𝒇 𝒔𝒖𝒏] © 2024</p>
+                        </div>
+                    </div>
+                </footer>
+            );
+        };
+
+        // المكون الرئيسي
+        const App = () => {
+            const [currentPage, setCurrentPage] = useState('home');
+
+            const renderPage = () => {
+                switch (currentPage) {
+                    case 'home':
+                        return <HomePage setCurrentPage={setCurrentPage} />;
+                    case 'azkar':
+                        return <AzkarPage />;
+                    case 'hadith':
+                        return <HadithPage />;
+                    case 'arkan':
+                        return <ArkanPage />;
+                    case 'ahkam':
+                        return <AhkamPage />;
+                    case 'quran':
+                        return <QuranPage />;
+                    case 'prayer':
+                        return <PrayerPage />;
+                    default:
+                        return <HomePage setCurrentPage={setCurrentPage} />;
+                }
+            };
+
+            return (
+                <div>
+                    <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    <main>
+                        {renderPage()}
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        // render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
